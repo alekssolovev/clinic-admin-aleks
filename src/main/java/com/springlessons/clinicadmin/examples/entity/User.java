@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -47,6 +48,8 @@ public class User /*extends AutoIncrementIdentity*/ {
             inverseJoinColumns = @JoinColumn(name = "shelter_id") // столбец (внешний ключ) для хранения идентификаторов приютов
     )
     private List<AnimalShelter> shelters = new ArrayList<>(); // Список должен быть инициализирован
+
+
 
 
     // Принадлежность животных пользователю. У животного может быть один владелец,

@@ -20,8 +20,8 @@ public class NotificationService  {
     private final JavaMailSender javaMailSender;
     private PatientService patientService;
 
-    public NotificationService(PatientService patientService, JavaMailSender javaMailSender) {
-        this.patientService=patientService;
+    public NotificationService( JavaMailSender javaMailSender) {
+        //this.patientService=patientService;
         this.javaMailSender = javaMailSender;
     }
 
