@@ -4,7 +4,10 @@ import com.springlessons.clinicadmin.entity.Doctor;
 import com.springlessons.clinicadmin.entity.Specialization;
 import com.springlessons.clinicadmin.service.DoctorService;
 import com.springlessons.clinicadmin.service.SpecializationService;
+import com.springlessons.clinicadmin.service.notification.NotificationService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +24,7 @@ import java.util.List;
 public class DoctorController {
     private final DoctorService doctorService;
     private final SpecializationService specializationService;
+    private NotificationService notificationService;
 
     public DoctorController(DoctorService doctorService, SpecializationService specializationService) {
         this.doctorService = doctorService;
@@ -30,6 +34,7 @@ public class DoctorController {
     /**
      * Возвращает форму добавления врача
      */
+    @Secured("ROLE_ACCOUNT_MANAGER")
     @GetMapping("/doctor/form")
     public String getDoctorAddForm(Doctor doctor, Model model) {
         model.addAttribute("specialization_list", specializationService.getSpecializations());
@@ -42,9 +47,11 @@ public class DoctorController {
      * в запросе передается идентификатор добавленного врача
      * В случае неудачи возвращает текущую страницу с информацией об ошибке
      */
+    @Secured("ROLE_ACCOUNT_MANAGER")
     @PostMapping("/doctor")
-    public String addDoctor(@Valid Doctor doctor, BindingResult bindingResult) {
+    public String addDoctor(@Valid Doctor doctor, BindingResult bindingResult) throws MessagingException {
         if (bindingResult.hasErrors()) return "doctor/doctor-add-form";
+        notificationService.send();
         return "redirect:/doctor/form?id=" + doctorService.addDoctor(doctor);
     }
 
